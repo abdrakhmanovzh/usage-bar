@@ -3,19 +3,25 @@
 # so it works on immutable Fedora Atomic / Bazzite without rpm-ostree).
 set -euo pipefail
 
-SRC="$(cd "$(dirname "$0")" && pwd)/UsageBar"
+SRC="$(cd "$(dirname "$0")" && pwd -P)"
 CFG="${XDG_CONFIG_HOME:-$HOME/.config}/DankMaterialShell"
 DEST="$CFG/plugins/UsageBar"
 ID="usageBar"
 
 command -v python3 >/dev/null || { echo "python3 not found" >&2; exit 1; }
+command -v jq >/dev/null || { echo "jq not found" >&2; exit 1; }
 mkdir -p "$CFG/plugins"
 
-if [ -e "$DEST" ] && [ ! -L "$DEST" ]; then
+if [ "$(realpath -m "$DEST")" = "$SRC" ]; then
+  # Cloned straight into the plugins folder (or already linked here).
+  echo "Plugin is at $DEST"
+elif [ -e "$DEST" ] && [ ! -L "$DEST" ]; then
   echo "$DEST exists and is not a symlink; remove it first." >&2; exit 1
+else
+  # Cloned elsewhere (e.g. a dev checkout): link it into the plugins folder.
+  ln -sfn "$SRC" "$DEST"
+  echo "Linked $DEST -> $SRC"
 fi
-ln -sfn "$SRC" "$DEST"
-echo "Linked $DEST -> $SRC"
 
 if [ "${1:-}" = "--no-bar" ]; then exit 0; fi
 

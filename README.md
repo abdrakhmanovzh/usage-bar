@@ -9,13 +9,18 @@ DankMaterialShell bar widget showing Claude and Codex subscription usage.
 - **IPC:** `dms ipc call usageBar toggle` / `dms ipc call usageBar refresh`. For example, in niri:
   `Mod+U { spawn "dms" "ipc" "call" "usageBar" "toggle"; }`
 
-## Install (Bazzite / any Fedora Atomic)
+## Install
 
 ```sh
-git clone https://github.com/abdrakhmanovzh/usage-bar && cd usage-bar
-./install.sh            # symlink into ~/.config/DankMaterialShell/plugins, enable, add to bar
-./install.sh --no-bar   # symlink only; add it yourself in Settings → Plugins / DankBar
+git clone https://github.com/abdrakhmanovzh/usage-bar ~/.config/DankMaterialShell/plugins/UsageBar
+~/.config/DankMaterialShell/plugins/UsageBar/install.sh   # enable it and add it to the bar
 ```
+
+Then run `dms restart` if it doesn't show up. To update, run `git pull` in that folder.
+
+`install.sh --no-bar` skips enabling and the bar edit; turn it on yourself in Settings → Plugins and add it to DankBar.
+If you cloned somewhere else (e.g. `~/code/usage-bar` for development), `install.sh` symlinks that checkout into
+the plugins folder instead.
 
 Everything lives in `$HOME`. Nothing is layered with rpm-ostree and there are no pip packages: the fetcher is
 stdlib Python, and `python3` is part of the base image. The `claude` and `codex` CLIs don't need to be on
@@ -23,7 +28,7 @@ the shell's `PATH`; only their credential files are read.
 
 ## How the data is fetched
 
-`UsageBar/usage-fetch.py` prints one JSON object. It is the same approach
+`usage-fetch.py` prints one JSON object. It is the same approach
 [CodexBar](https://github.com/steipete/CodexBar) uses in its OAuth paths:
 
 | | Claude | Codex |
@@ -42,5 +47,5 @@ numbers dimmed and asks you to use the CLI once, which refreshes the token.
 Test the fetcher directly:
 
 ```sh
-python3 UsageBar/usage-fetch.py | jq
+python3 usage-fetch.py | jq
 ```
