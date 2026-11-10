@@ -66,8 +66,6 @@ PopoutComponent {
             height: cardColumn.implicitHeight + Theme.spacingM * 2
             radius: Theme.cornerRadius
             color: Theme.surfaceContainerHigh
-            border.width: isMain ? 1 : 0
-            border.color: Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.4)
 
             Column {
                 id: cardColumn
@@ -83,12 +81,13 @@ PopoutComponent {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: Theme.spacingS
-                        DankIcon {
+                        Image {
                             anchors.verticalCenter: parent.verticalCenter
-                            name: card.meta.icon
-                            size: 20
-                            color: Theme.primary
-                            filled: true
+                            width: 20
+                            height: 20
+                            sourceSize: Qt.size(40, 40)
+                            smooth: true
+                            source: Qt.resolvedUrl(card.meta.logo.replace("%1", Theme.isLightMode ? "light" : "dark"))
                         }
                         StyledText {
                             anchors.verticalCenter: parent.verticalCenter
@@ -125,13 +124,25 @@ PopoutComponent {
                             tooltipText: "Open usage page"
                             onClicked: Qt.openUrlExternally(card.info.dashboardUrl)
                         }
-                        DankActionButton {
-                            iconName: "star"
-                            buttonSize: 28
-                            iconSize: 18
-                            iconColor: card.isMain ? Theme.primary : Theme.surfaceTextMedium
-                            tooltipText: card.isMain ? "Shown in bar" : "Show in bar"
-                            onClicked: panel.widget.setMainProvider(card.modelData)
+                        // DankActionButton can't fill its icon, so build the same thing with a filled star.
+                        StyledRect {
+                            width: 28
+                            height: 28
+                            radius: Theme.cornerRadius
+                            color: "transparent"
+                            DankIcon {
+                                anchors.centerIn: parent
+                                name: "star"
+                                size: 18
+                                filled: card.isMain
+                                color: card.isMain ? Theme.primary : Theme.surfaceTextMedium
+                            }
+                            StateLayer {
+                                stateColor: Theme.primary
+                                cornerRadius: parent.radius
+                                tooltipText: card.isMain ? "Shown in bar" : "Show in bar"
+                                onClicked: panel.widget.setMainProvider(card.modelData)
+                            }
                         }
                     }
                 }

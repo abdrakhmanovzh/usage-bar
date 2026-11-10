@@ -28,6 +28,10 @@ PluginComponent {
         if (pluginService) pluginService.savePluginData(pluginId, "mainProvider", id)
     }
 
+    function logoUrl(id) {
+        return Qt.resolvedUrl(backend.providerMeta[id].logo.replace("%1", Theme.isLightMode ? "light" : "dark"))
+    }
+
     function levelColor(percent, fallback) {
         if (percent === null || percent === undefined) return fallback
         if (percent >= 90) return Theme.error
@@ -56,12 +60,13 @@ PluginComponent {
                     required property string modelData
                     spacing: 3
                     anchors.verticalCenter: parent.verticalCenter
-                    DankIcon {
+                    Image {
                         anchors.verticalCenter: parent.verticalCenter
-                        name: root.backend.providerMeta[modelData].icon
-                        size: root.iconSize
-                        color: root.pillColor(modelData)
-                        filled: modelData === root.mainProvider
+                        width: root.iconSize - 2
+                        height: width
+                        sourceSize: Qt.size(width * 2, height * 2)
+                        smooth: true
+                        source: root.logoUrl(modelData)
                     }
                     StyledText {
                         anchors.verticalCenter: parent.verticalCenter
@@ -84,12 +89,13 @@ PluginComponent {
                 Column {
                     required property string modelData
                     anchors.horizontalCenter: parent.horizontalCenter
-                    DankIcon {
+                    Image {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        name: root.backend.providerMeta[modelData].icon
-                        size: root.iconSize
-                        color: root.pillColor(modelData)
-                        filled: modelData === root.mainProvider
+                        width: root.iconSize - 2
+                        height: width
+                        sourceSize: Qt.size(width * 2, height * 2)
+                        smooth: true
+                        source: root.logoUrl(modelData)
                     }
                     StyledText {
                         anchors.horizontalCenter: parent.horizontalCenter

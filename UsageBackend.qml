@@ -10,8 +10,8 @@ Singleton {
 
     readonly property var providerIds: ["claude", "codex"]
     readonly property var providerMeta: ({
-        claude: {name: "Claude", icon: "auto_awesome"},
-        codex: {name: "Codex", icon: "terminal"}
+        claude: {name: "Claude", icon: "auto_awesome", logo: "icons/claude.svg"},
+        codex: {name: "Codex", icon: "terminal", logo: "icons/openai-%1.svg"}
     })
 
     // Per provider: {ok, plan, windows, extra, error, errorKind, updatedAt, stale}
