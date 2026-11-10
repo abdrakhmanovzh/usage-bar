@@ -1,0 +1,13 @@
+{
+  "id": "usageBar",
+  "name": "Usage Bar",
+  "description": "Claude and Codex subscription usage in your DankBar",
+  "version": "0.1.0",
+  "author": "Zhassulan",
+  "type": "widget",
+  "capabilities": ["dankbar-widget"],
+  "component": "./UsageBar.qml",
+  "settings": "./UsageSettings.qml",
+  "icon": "data_usage",
+  "permissions": ["process", "settings_read", "settings_write"]
+}
